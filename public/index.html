@@ -434,9 +434,9 @@ Our human brains can find the pattern, right?
 ```javascript
 let weight = 1;
 
-data.forEach((x) => {
+data.forEach(({ input, answer }) => {
   // make a guess
-  const guess = x * weight
+  const guess = input * weight
   // figure out how wrong we were
   const error = answer - guess
   // we need to apply learning rate (I'll talk about this more next slide)
