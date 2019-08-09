@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Using Machine Learning to Eliminate Meetings</title>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/png" href=".public/assets/favicon.png" sizes="32x32">
+    <style>
+      /* @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz); */
+      @import url(https://fonts.googleapis.com/css?family=Oswald:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=EB+Garamond:400,400i,700,700i&display=swap);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'EB Garamond', serif;; }
+      h1, h2, h3 {
+        font-family: 'Oswald';
+        font-weight: normal;
+      }
+      img {
+        max-width: 100%;
+        max-height: 604px;
+        width: auto;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle
+
+
+![talk title](./public/assets/That-Conference-Branding-Slide.png)
+
+---
+class: center, middle
+
+
+![talk title](./public/assets/That-Conference-Sponsors-Slide.png)
+
+???
+
+I'd like to take a moment to thank the conference sponsors.
+
+---
+
+class: center, middle
+
+# Using Machine Learning to Eliminate Meetings
+
+???
+
+Welcome everyone.
+
+Has everyone had a good conference so far?
+
+Everyone excited for the pig roast and pool party?
+
+I realize there are so many great sessions, and I'm super happy you chose to spend this one with me.
+
+How's the energy level?
+
+I'd just like to point out that my minutes spent outdoors and fresh vegetables eaten are in a dead lock tie at 0 since Monday afternoon.
+
+---
+
+class: center, middle
+
+# What are we going to do this session?
+
+???
+The goal of this session is to share the few little pieces of knowledge that moved me from "machine learning curious" to "machine learning practicing"
+
+I have been interested in machine learning for years, but could never think of a practical application.
+
+In the past year I finally came up with practical(?) use for it.
+
+That use is a story pointing bot, powered by machine learning
+
+We took our Jira story history export, wrangled the data into an appropriate format, and built a training set
+
+Eliminated a weekly meeting
+
+If you want to care about machine learning, and haven't found a way yet, this talk might be for you.
+
+Also a disclaimer, the code I share is written in JS. The concepts are certainly not JS specific though
+
+---
+class: middle, center
+
+# Who am I?
+
+???
+
+That is a good question.
+
+---
+
+class: middle
+
+# **Personally:** I'm a Hawaiian born, banjo playing, ice hockey ~~goalie~~ player
+
+???
+I live in Milwaukee with my wife, two year old daughter (and another baby on the way in November), and goldendoodle
+
+I was born on Maui, and moved to Northwestern Pennsylvania when I was 9.
+
+I traded boogie boards for ice hockey skates pretty soon after the move, and play to this day.
+
+A fun fact: I worked as a sailing instructor in high school, and got my USCG Master's license in 2008.
+
+It has since lapsed because I don't have near the sea time to keep it current
+
+So I can say, I was a ship captain, but no longer am
+
+I play the banjo and sing in an old time string band in Milwaukee. The band is named Pay The Devil, and yes, our music is on Spotify (and every other digital music service)
+---
+class: middle center
+
+![pay the devi on spotify](./public/assets/ptd-screen-shot.png)
+
+---
+
+class: middle
+
+# **Professionally:** for the past 10 or so years I've been using JavaScript to solve problems
+
+???
+I wrote my first website in 1995, by looking at the source code of other websites.
+
+HTML, Table layouts, iframes, background images, Netscape, the whole nine yards
+
+PHP came next, and I built websites for my Starcraft gaming clan, and one to host my photography.
+
+College at Penn State, film production, audio engineering as a hobby, and I built a few websites for friends / companies I worked for
+
+Eventually decided to get a job at a digital agency in Milwaukee, and have been in the industry ever since
+
+Currently I'm a JavaScript engineer at Northwestern Mutual.
+
+I will take this time to plug our booth. I didn't really know much about the dev culture at Northwestern Mutual before I worked there, so if you're interested this is a great time to learn more if you're interested. Or at least grab a coozie.
+
+---
+
+class: middle
+
+# **Both personally and professionally:** I love tinkering with new technologies and solving problems with computers
+
+???
+I love solving problems with computers
+
+Be it producing music, or layering the perfect set of real time plugins to get perfect sound in a live setting
+
+I love writing many "joke" web applications
+
+I have a gatsby blog documenting all the plants in my yard (plants.eisenberg.ninja)
+
+I have a text to chord charts management system that I've rewritten in 3 languages (tabify.rocks). Funny story, it's now four languages, I just haven't launched the new version. Coming soon.
+
+I built a calculator to calculate how many flights of stairs I need to walk up and down to burn off a cookie (calorie-climb.eisenberg.ninja)
+
+Regent.js
+
+hobo calculator (hobo.eisenberg.ninja)
+
+If you're interested in checking any of these out I'm happy to stay after this talk is over and answer any and all questions
+
+But my current favorite is a rank order voting system that I used to pick the title of this talk. (sortada.com)
+---
+
+class: center, middle
+
+![talk title](./public/assets/sortada-talk-title.png)
+
+???
+
+My number one choice was "Scrum Masters Don't want you to Learn this One Weird Machine Learning Trick"
+
+And my second choice was "You won't believe what happens when we send a machine to our sprint refinements"
+
+I apparently am a fan of click bait titles, so if anyone knows of any openings at BuzzFeed you should hit me up
+
+---
+
+class: middle center
+
+# Who am I not?
+
+???
+
+I am not an expert in data science or machine learning.
+
+I am not standing here with any intention of teaching you "the right way" to do any of this.
+
+My goal, is simply to attempt to share the inspiration I needed to get started down this path. We will get a little technical, but the concepts and potential uses for machine learning are truly the meat of this talk.
+
+I had a difficult time connecting the dots between machine learning, and any practical use for it in my daily life.
+
+I realize that my preferred way of learning something is by using it in a project, and that was lacking for me.
+
+It's worth taking a second to address something that comes up when you say "machine learning in JavaScript"
+
+---
+class: center middle
+
+![eye-roll](./public/assets/eye-roll.gif)
+
+???
+
+You tend to get this reaction.
+
+You can tell I was still messing with these slides this morning because I'm going to include a quote from this morning's keynote
+
+Seth Juarez
+
+"this is for everyone"
+
+Don't let them grind you down.
+
+Ever since August of 2017 TensorFlow.js has the ability to run on the GPU. the V8 engine is fast.
+
+I assume there will always be tension between developers who use different languages, but that should be true.
+
+If what you know or like is JavaScript, use JavaScript. End of story. It doesn't matter.
+---
+
+class: middle center
+
+# `¯\_(ツ)_/¯`
+
+???
+
+Hopefully you're still with me.
+
+Are you still with me?
+
+---
+
+class: center
+
+# Hexapawn
+
+![hexapawn board](./public/assets/hexapawn-board.png)
+
+???
+Has anyone ever heard of hexapawn?
+
+It is a board game invented by an academic (Martin Gardner) 50 or so years ago
+
+It's a good example because it is so simple.
+
+Think of it as chess on a 3x3 board, and each player has three pawns in their home row
+
+The pawns move like normal chess pawns. Forward (if the space is available), and diagonal to capture
+
+You win if you advance one of your pawns to the other player's home row, capture all their pieces, or make a move that leaves them unable to move (like a stalemate in chess)
+
+---
+class: center
+
+![hexapawn board](./public/assets/hexapawn-moves.jpg)
+
+???
+
+The cool thing about hexapawn is that there are so few possibilities we can lay them all out.
+
+The game will always end before the 7th turn. 
+
+In this example the human will always move first. The "computer" will always move on the even numbered turns. Here you can see we have all the possible board states and moves mapped out for moves 2, 4, and 6.
+
+Seth talked about a decision tree. Can our programmer lizard brains start thinking about how to write a decision tree to make the right move?
+
+Can anyone start thinking of a deep learning model that would learn to make the right move?
+
+---
+class: center
+
+![hexapawn board](./public/assets/example-move.png)
+
+???
+If we look at the top left most cell, we will see a possible board state. Our opponent has moved their left most pawn up one rank. We are presented with three options
+
+Capture their pawn with our middle pawn (orange), advance our middle pawn one rank (blue), or advance our right most pawn one rank (yellow).
+
+What should we do?
+
+It turns out only one of these three moves doesn't end in an immediate loss. Can you decide which one?
+
+We have to capture the pawn (orange). If we advance our middle pawn (blue), their only remaining move is to advance their right most pawn, and that leaves us without a move. If we advance our right most pawn (yellow), they can capture our middle pawn, advancing a pawn to our home rank in the process.
+
+Cool, but how does this relate to machine learning?
+
+---
+class: center
+
+![hexapawn board](./public/assets/matchbox.jpg)
+
+???
+
+The answer is the matchbox mechanism
+
+Each possible move is represented by a colored bead (remember the colors of the arrows from the last slide?) The computer makes moves by selecting a bead at random, and then making the move associated with that color.
+
+But here is the catch, if we make a move that results in a loss, we remove that colored bead from the box, ensuring that the computer will never make that move again.
+
+You keep playing games against your matchbox computer, and each time you win you remove the losing bead from the computer. As you play more and more games it will beat you more and more often.
+
+---
+class: center middle
+
+# Try this with your kids
+## (or anyone who doesn't understand machine learning)
+
+???
+
+There are instructables and tutorials all over the internet
+
+The day I learned about this activity, the first person I shared it with was my dad.
+
+---
+class: center middle
+
+# Is this matchbox computer really learning?
+
+???
+
+Yeah, it is.
+
+If you think about it all our brains do is take inputs in the form of our senses, and decides which electrical signals it wants to send out through our nervous system. Nerves either fire or not, depending on the strength of their connection, and that connection is strengthened over time with a reward chemical.
+
+(I realize it is more complex than that) I'm also not an expert in neuro science. So Not an expert in anything I've talked about yet, for those of you keeping score at home.
+
+At first, your matchbox computer is just randomly making (legal) moves based on nothing. But after we negatively reinforce the bad moves, it stops making them.
+
+It's a lot like at one point in your life you probably removed the "stick a fork in the outlet" bead from your brain.
+
+I'd like us to hold this question of "is it really learning" in the back of our heads for later. I'll remind you
+
+---
+class: center middle
+
+# What about positive reinforcement?
+
+???
+
+Glad you asked. So, only "punishing" mistakes is certainly a way to eventually train this matchbox computer to not make any mistakes. But it isn't the only way.
+
+We could also reinforce the computer's victories
+
+By adding an additional bead of the winning color every time the computer wins we encourage it to make more good moves. So now if the computer does something good, it is more likely to make that same move again. We should go back and add a bead for every winning move in an entire game, so the entire path is reinforced. After all, it led to a victory.
+
+By both removing losing beads, and reinforcing winning ones the computer will win more games as it is being trained, because it doesn't need to wait for a failing case to gain insight.
+
+In much the same way, you don't need to wait until your teeth fall out to learn that you should brush them. Someone probably rewarded your behaviors that they wanted.
+
+---
+class: center middle
+
+# Wrapping up the hexapawn example
+
+???
+Jumping back to our lizard programmer brains.
+
+In a game this simple, with a limited possible combinations of moves, we could certainly write a piece of software that played hexapawn perfectly. We could simply hardcode in all the possible board states, and return the most optimal move. If we were to do that though, we would need to use our lizard programmer brains to think through all the possible combinations and come up with the best move.
+
+That is what excites me most about this matchbox computer. No one is coding it, but it is learning through trial and error, much like humans learn. We don't need to teach it strategy.
+
+We don't even need to teach it what a legal move is. We could have way more beads that make illegal moves. We could have it try to move the other player's pieces. When the computer made those moves we would remove the bead and it would "learn" what moves it can and cannot make.
+
+Evolution learning also has another pretty neat benefit: it doesn't limit the computer to think like a human. It allows the computer to analyze the inputs, and figure out the best way to get the answer.
+
+---
+class: center middle
+
+![Gary kasperov quote](./public/assets/chess-quote.png)
+
+???
+
+"The implications go far beyond my beloved chessboard... Not only do these self-taught expert machines perform incredibly well, but we can actually learn from the new knowledge they produce."
+
+Gary Kasperov, former world chess champion
+
+Learn from the new knowledge they produce. Let's pause for a second to think about that. Machine's are solving problems in ways we have never thought. Take chess for example
+
+Warning, this is going to get a little nerdy for a slide. Remember the safe word
+
+---
+class: center, middle
+
+### In the 1950s, mathematician Claude Shannon wrote a paper about how one could program a computer to play chess. In it, he made a quick calculation to determine how many different games of chess were possible, and came up with the number 10^120. This is a very, very large number — the number of atoms in the observable universe, by comparison, is only estimated to be around 10^80.
+
+???
+
+Just a quick FYI, this is called the Shannon number. It's probably smaller than his estimate because he doesn't really account for illegal moves, but regardless... it's a huge number.
+
+A human can never hope to play any significant portion of the chess games possible, but every day it's possible for machines to play more and more. We can, and do, actually learn from their fresh insights. But I digress.
+
+---
+class: center, middle
+
+# Let's jump into the basics of _what_ machine learning is
+## (as I understand it)
+
+???
+
+Enough theory, let's talk about the basics of what is actually happening when a computer learns.
+
+We have seen a set of matchboxes learn, how does that translate to software?
+
+---
+class: center, middle
+
+# input * weight = output
+
+???
+The heart of machine learning is simple. Input times weight.
+
+The secret sauce is figuring out the weight. That is where training comes into play.
+
+Pardon the JavaScript examples (and lack of semicolons)
+
+---
+class: middle
+
+```javascript
+const data = [
+  { input: 2, answer: 4 },
+  { input: 4, answer: 8 },
+  { input: 6, answer: 12 },
+  { ... }
+]
+```
+
+Our human brains can find the pattern, right?
+
+```javascript
+let weight = 1;
+
+data.forEach(({ input, answer }) => {
+  // make a guess
+  const guess = input * weight
+  // figure out how wrong we were
+  const error = answer - guess
+  // we need to apply learning rate (I'll talk about this more next slide)
+  const learningRate = 0.001
+  const adjustedError = error * learningRate
+  // now, adjust the weight
+  weight = weight + adjustedError
+})
+```
+
+???
+Let's take a moment to look over this code.
+
+In a world where we know the formula we can obviously program it in. But, we can use trial and error to figure out the formula.
+
+We're going to give our function a starting point. It'll guess randomly at an formula, and then we'll tell it how wrong it was.
+
+The next time it guesses, it'll be slightly more informed, and _should_ be slightly less wrong.
+
+This is a trivial example, but hopefully you can see how powerful even this little bit of code can be to detect patterns.
+---
+
+class: center, middle
+
+# Breaking some rules, switching to live code
+
+(If you're interested this is a link to a github repo with this example)
+
+My Github username is `eisenivan` if you want to find it that way.
+
+![github repo](./public/assets/single-layer-qr.png)
+
+???
+
+Alright, I'm going to break some rules and switch over to live code. I have this file up on my Github account, and this QR code will get you there. I'll see you on the other side.
+
+---
+
+class: center middle
+
+# Wrapping up our "from scratch" example
+
+???
+
+Let's really quickly touch on some limitations of this method.
+
+We're using a single weight, kind of by definition, this network won't be able to come up with a single weight that would work for anything exponential.
+
+If the equation was input to the power of 2 instead of input multiplied by 2 it wouldn't come up with a weight that worked in every situation, because such a number doesn't exist.
+
+At a super high level this is where layers come into play. Each layer can get the input of one or many layers and can make decisions based on the result of other layers.
+
+This is where libraries start to become useful. To abstract away these connections.
+
+I'm not going to dive into that here, but if you're interested I'd start with TensorFlow. It's available for a bunch of languages, including JavaScript.
+
+---
+class: center, middle
+
+# You've done a lot of talking, but I haven't gotten out of any meetings, and you said this would get me out of meetings
+
+???
+
+True, let's get to that.
+
+How did we use machine learning to eliminate meetings?
+
+---
+class: center middle
+
+# We created a neural network that put high level story point estimates on stories for us
+
+???
+
+A little backstory
+
+Scrum, pointing poker, complexity score
+
+The problem is that this is meant to figure out what we think we can accomplish in a sprint. The business wanted estimates on features that we wouldn't be working on for months.
+
+Seems suspiciously like a scale issue.
+
+"T-shirt sizing", quick estimates so we can roughly coordinate feature development across teams.
+
+Long term estimates
+
+The problem is that to honestly put estimates on these stories we needed the whole team ($)
+
+The stories also weren't always completely done with a capital D
+
+My lazy programmer brain started wondering if there was a way to stop doing this
+
+The hardest part is building a training set. We can't just write a function to generate a million stories with story points on them.
+---
+class: center middle
+
+# We already had a training set
+
+???
+
+Our project management tool allows us to export all our past stories. We have taken the time to put story point estimates on almost 1,000 stories over the course of the project.
+
+So we had a pretty big list of data points, text and story point values, that we could analyze.
+---
+
+class: center middle
+
+# So we want to turn text into story points
+
+???
+
+Do we all know what story points are? Is it worth talking about that for a second?
+
+Ok, so input times weight, we got this let's go.
+---
+class: middle
+
+# The problem
+
+```
+"Make the header avatar larger" * weight = NaN
+```
+
+???
+
+Ok, so this isn't going to work. What are we going to do?
+
+Anyone have any ideas?
+
+We need to normalize this text. We need to convert it into a format that our model can use.
+
+In my opinion the simplest way to do this is by using something called a bag of words model.
+
+It is simple enough to reason through, so we're going to.
+
+We need to convert this text into an array of numbers, first we will need a key
+---
+
+class:
+
+# Bag of words: the key
+
+"make the header avatar larger"
+
+```
+const key = [
+  'make',
+  'the',
+  'header',
+  'avatar',
+  'larger'
+]
+```
+
+???
+
+We need to create a key out of unique words. So in our example "make the header avatar larger" we create an array with an item for each unique word.
+
+Since this is our first story, the array has a single word for each word, and they all exist once.
+
+At this stage you should consider cleaning up your text too.
+
+lowercase?, trim?, replace special characters?
+
+You'll need to decide if case, white space, and special characters will help your model make a decision.
+
+It isn't always straight forward to know this, we're going to talk about that in a little bit.
+
+Alright, let's do another one
+---
+
+class:
+
+# Bag of words: the key
+
+"add border radius to **avatar**"
+
+```
+const key = [
+  'make',
+  'the',
+  'header',
+  'avatar',
+  'larger',
+  'add',
+  'border',
+  'radius',
+  'to'
+]
+```
+
+???
+
+So now we have pulled unique words from two stories. The only word in common in this example is "avatar", so that only exists once.
+
+Let's do a quick thought exercise... is there another way to create this key?
+
+Groups of words? What would that do to our model?
+
+Again, it can be hard to know if this change will help or hurt the model's performance. We'll talk more about that.
+
+Are there any questions about creating the key?
+---
+
+class:
+
+# Bag of words: the key
+
+"add border radius to **avatar**"
+
+```
+const key = [
+  'make the',
+  'the header',
+  'header avatar',
+  'avatar larger',
+  'larger add',
+  'add border',
+  'border radius',
+  'radius to',
+  'to avatar'
+]
+```
+
+???
+
+Notice anything different?
+
+We now no longer have overlap, because there is not any overlap between the two stories.
+
+What are the implications of this?
+
+Will this help our hurt our model?
+
+Reading through this key is much easier imo. But what will the model think?
+
+I personally think this is one of the cooler quirks of deep learning.
+
+It feels more like a science experiment than what I call "regular" coding.
+
+It is important to create a testable hypothisis and constantly check the results
+---
+class:
+
+# Bag of words: the input
+
+Consider the phrase "make the avatar larger"
+```
+const input = [
+  1, // make
+  1, // the
+  0, // header
+  1, // avatar
+  1, // larger
+  0, // add
+  0, // border
+  0, // radius
+  0 // to
+]
+```
+
+Formatted like this it looks more similar to the example from the keynote
+
+```
+[[ 1, 1, 0, 1, 1, 0, 0, 0, 0]]
+```
+
+???
+
+See what we did there?
+
+Using the key we converted text input into a format our model will understand
+
+Each array item is the count of times that corresponding word appears in the text.
+
+Any questions about this?
+---
+
+class:
+
+# We now have an array of weights
+
+```javascript
+const key = ourKey // this would be our key from the last example
+
+// create a new array the correct length and fill it with 0s
+let weights = new Array(key.length)
+  .fill(0)
+
+// input is now an array, so let's create a weight for each item
+input.forEach((x, i) => {
+  // make a guess
+  const guess = x * weights[i]
+  // figure out how wrong we were
+  const error = answer - weights[i]
+  // we need to apply learning rate (I'll talk about this more next slide)
+  const learningRate = 0.001
+  const adjustedError = error * learningRate
+  // now, adjust the weight
+  weights[i] = weights[i] + error
+})
+```
+
+???
+
+In our earlier example we were looking at a single input, a number. Now our input will be an array, the array we made in the last slide.
+
+The simplest way to handle this input is to modify our training system to have an array of weights the length of our key.
+
+Each array item will have its own weight.
+
+This is probably a good time to mention TensorFlow again. There are many ways to handle inputs. We will start throwing around terms like "loss" and "optimizer" functions. And "Mean Squared Error" and "SGD" (Stochastic gradient descent).
+
+This is where machine learning really starts. You will start to tweak your model, re-train it, and test the new results against your old results.
+
+Any questions about this? We will talk more about testing in a bit.
+
+---
+
+class:
+
+# Converting our weights to story points
+
+```javascript
+  const predict = (input, weights) => {
+    return input.reduce((acc, x, i) => {
+      return acc + (x * weights[i]), 0)
+    }
+  }
+```
+
+???
+Before we start talking about this... for all you JS gurus
+
+Yes, I realize we can single line this function... but I felt that it didn't take up enough vertical space on the slide
+
+==
+
+We would need to modify our predict function to handle an array as input too.
+
+Looping over each input array item, summing the weights
+
+Again, summing the weights isn't the only way to do this, or the right way to do this, or even a good way to do this, it's just a really simple way to do this.
+
+---
+class: center, middle
+
+# Fine, we can make it one line
+
+```javascript
+  const predict = (input, weights) => input.reduce((acc, x, i) => acc + (x * weights[i]), 0)
+```
+
+???
+
+ES6, or ES2015 for the win
+---
+class: center, middle
+
+# Let's take a quick look at the Story Point Bot
+
+???
+
+Jumping back into some code here. Let's take a look at a TensorFlow implementation
+
+---
+class: center, middle
+
+# A word about testing the quality of a model
+
+???
+
+We have talked about it a good amount but it's worth restating, it can be extremely difficult to score the quality of a model
+
+It is important to come up with a grading scale early, and test each iteration against that metric.
+
+Sometimes this is difficult
+
+---
+class: center middle
+
+![histogram](./public/assets/histogram.png)
+
+???
+
+For the story point bot we graphed all our stories worth of story point estimates (in the terminal of course)
+
+We then ran all of our past stories and all of our future stories through the bot and graphed the resulting estimates
+
+Our theory was that the distribution should be similar.
+
+This assumes the average complexity of our stories remains the same
+
+Not everything that seems like it should make the model better actually does
+---
+class: center, middle
+
+# So, did it work?
+
+???
+
+It's hard to know really. It didn't _not_ work.
+
+We were grading the results on the distribution of the story points. For that it worked.
+
+We still take the time to put human story points on every story pulled into a sprint, and anecdotally, the story point bot is right a lot.
+
+A big part of that could certainly be that our standard distribution of story points had a lot of "3s", so the story point bot puts 3s on a lot of items.
+
+We wrote a function that spits out outliers (any results that are 0 or higher than 20), so we can manually look at them to try to figure out what the story point bot was thinking.
+
+We don't get a lot of outliers
+
+The story point bot is limited by its vocabulary. New features introduce new words with no historic weighting.
+
+===================
+
+**If there is time**
+
+Let's all real quickly brainstorm the outline of a model that would help you choose the best seat to sit in when you walk into a talk
+
+---
+class: center, middle
+
+# What makes a good model?
+
+???
+
+This is the last thing I want to talk about.
+
+Again, did it work?
+
+It worked in the sense that our project manager is happy enough with the output of the story point bot to use it for high level estimates.
+
+It worked in the sense that it eliminated a re-occuring meeting for our development team.
+
+If the neural network comes up with the correct answer, does it really matter how?
+
+If AlphaGoZero makes a few moves humans don't understand and would consider bad, but still wins, are the moves actually bad?
+
+These are all questions I legitimately do not know the answers to.
+
+My shallow dive into machine learning has changed how I think about solving certain types of problems.
+
+And that has been exciting.
+
+Thank you so much.
+
+Any questions?
+
+---
+class: center, middle
+
+
+![talk title](./public/assets/That-Conference-2020.png)
+
+???
+
+Remember to put That Conference 2020 on your calendars.
+
+Enjoy the pig roast.
+
+
+    </textarea>
+    <script src="./public/assets/remark.js">
+    </script>
+    <script>
+      var slideshow = remark.create({
+        ratio: '4:3',
+        highlightLanguage: 'javascript',
+        highlightStyle: 'monokai'
+      });
+    </script>
+  </body>
+</html>
