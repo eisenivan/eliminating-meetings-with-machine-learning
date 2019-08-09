@@ -58,6 +58,8 @@ I realize there are so many great sessions, and I'm super happy you chose to spe
 
 How's the energy level?
 
+I'd just like to point out that my minutes spent outdoors and fresh vegetables eaten are in a dead lock tie at 0 since Monday afternoon.
+
 ---
 
 class: center, middle
@@ -94,14 +96,14 @@ That is a good question.
 
 class: middle
 
-# **Personally:** I'm a Hawaiian born, banjo playing ice hockey ~~goalie~~ player
+# **Personally:** I'm a Hawaiian born, banjo playing, ice hockey ~~goalie~~ player
 
 ???
 I live in Milwaukee with my wife, two year old daughter (and another baby on the way in November), and goldendoodle
 
 I was born on Maui, and moved to Northwestern Pennsylvania when I was 9.
 
-I got traded boogie boards for ice hockey skates pretty soon after the move, and play to this day.
+I traded boogie boards for ice hockey skates pretty soon after the move, and play to this day.
 
 A fun fact: I worked as a sailing instructor in high school, and got my USCG Master's license in 2008.
 
@@ -124,7 +126,7 @@ class: middle
 ???
 I wrote my first website in 1995, by looking at the source code of other websites.
 
-Table layouts, iframes, background images, the whole nine yards
+HTML, Table layouts, iframes, background images, Netscape, the whole nine yards
 
 PHP came next, and I built websites for my Starcraft gaming clan, and one to host my photography.
 
@@ -143,16 +145,19 @@ class: middle
 # **Both personally and professionally:** I love tinkering with new technologies and solving problems with computers
 
 ???
+I love solving problems with computers
 
 Be it producing music, or layering the perfect set of real time plugins to get perfect sound in a live setting
 
 I love writing many "joke" web applications
 
-I have a gatsby blog documenting all the plants in my yards (plants.eisenberg.ninja)
+I have a gatsby blog documenting all the plants in my yard (plants.eisenberg.ninja)
 
-I have a text to chord charts management system that I've rewritten in 3 languages (tabify.rock). Funny story, it's now four languages, I just haven't launched the new version. Coming soon.
+I have a text to chord charts management system that I've rewritten in 3 languages (tabify.rocks). Funny story, it's now four languages, I just haven't launched the new version. Coming soon.
 
 I built a calculator to calculate how many flights of stairs I need to walk up and down to burn off a cookie (calorie-climb.eisenberg.ninja)
+
+Regent.js
 
 hobo calculator (hobo.eisenberg.ninja)
 
@@ -203,6 +208,8 @@ class: center middle
 You tend to get this reaction.
 
 You can tell I was still messing with these slides this morning because I'm going to include a quote from this morning's keynote
+
+Seth Juarez
 
 "this is for everyone"
 
@@ -431,12 +438,12 @@ data.forEach((x) => {
   // make a guess
   const guess = x * weight
   // figure out how wrong we were
-  const error = answer - weight
+  const error = answer - guess
   // we need to apply learning rate (I'll talk about this more next slide)
   const learningRate = 0.001
   const adjustedError = error * learningRate
   // now, adjust the weight
-  weight = weight + error
+  weight = weight + adjustedError
 })
 ```
 
@@ -898,7 +905,7 @@ Enjoy the pig roast.
     </script>
     <script>
       var slideshow = remark.create({
-        ratio: '16:9',
+        ratio: '4:3',
         highlightLanguage: 'javascript',
         highlightStyle: 'monokai'
       });
